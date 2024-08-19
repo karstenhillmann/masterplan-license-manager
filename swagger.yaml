@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   title: Masterplan License Manager
   description: |-
-    Masterplan License Manager: Docker deployable REST API server with MongoDB database, simplifying software license management
+    Masterplan License Manager: Docker deployable REST API server, simplifying software license management
 
   contact:
     email: info@aseko.de
@@ -204,6 +204,15 @@ components:
         message:
           type: string
           example: 'Renewed the license'
+    CreateResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 'f12a10dac17d920d53676c8f06beabcc'
+        message:
+          type: string
+          example: 'Created a new license'
     CreatePayload:
       required:
         - length
