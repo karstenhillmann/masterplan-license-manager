@@ -100,21 +100,6 @@ paths:
           description: Missing one or more of the "REQUIRED_CREATE" key(s) AND/OR "length" key in the json request
         '406':
           description: /api/v1/create requires a JSON payload
-  /api/v1/create-fields:
-    get:
-      security:
-        - BasicAuthentication: []
-      tags:
-        - manager
-      summary: List of required fields
-      description: This can be used to get a list of required fields to create a license
-      responses:
-        '200':
-          description: All the fields are listed under "fields" key
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateFieldsResponse'
   /api/v1/renew:
     patch:
       security:
@@ -136,53 +121,6 @@ paths:
           description: Unable to find a license with _id
         '406':
           description: /api/v1/renew requires a JSON payload
-  /api/v1/update:
-    patch:
-      security:
-        - BasicAuthentication: []
-      tags:
-        - manager
-      summary: Update license details
-      description: This can be used to update the fields of an existing license
-      requestBody:
-        $ref: '#/components/requestBodies/UpdatePayload'
-      responses:
-        '200':
-          description: Renewed the license
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UpdateResponse'
-        '404':
-          description: Unable to find a license with _id
-        '406':
-          description: /api/v1/update requires a JSON payload
-  /api/v1/delete:
-    delete:
-      security:
-        - BasicAuthentication: []
-      tags:
-        - manager
-      summary: Removes license
-      description: This can be used to delete a license
-      parameters:
-        - in: query
-          name: _id
-          required: true
-          schema:
-            type: string
-            example: 'f12a10dac17d920d53676c8f06beabcc'
-          description: Provide with the license ID to remove it from the database
-      responses:
-        '200':
-          description: Deleted the license
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DeleteResponse'
-        '404':
-          description: Unable to find a license with _id
-
   /api/v1/get-all:
     get:
       security:
@@ -200,17 +138,6 @@ paths:
                 $ref: '#/components/schemas/GetAllResponse'
         '404':
           description: Unable to retrieve the licenses
-  /ui:
-    get:
-      tags:
-        - admin
-      summary: The UI for managing the licenses
-      description: Open /ui in browser to access the admin UI, you will need to login using the admin password
-      responses:
-        '200':
-          description: Successfully loaded the website
-        '503':
-          description: Unable to load the website
 
 components:
 
@@ -277,38 +204,6 @@ components:
         message:
           type: string
           example: 'Renewed the license'
-    UpdateResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          example: 'Updated the license'
-    CreateResponse:
-      type: object
-      properties:
-        _id:
-          type: string
-          example: 'f12a10dac17d920d53676c8f06beabcc'
-        message:
-          type: string
-          example: 'Created a new license'
-    CreateFieldsResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          example: "All the fields are listed under \"fields\" key"
-        fields:
-          type: array
-          items:
-            type: string
-          example: ['name', 'email', 'company', 'product', 'length', 'machine-node', 'machine-sn']
-    DeleteResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          example: 'Deleted the license'
     CreatePayload:
       required:
         - length
@@ -346,21 +241,6 @@ components:
         length:
           type: number
           example: 365
-    UpdatePayload:
-      required:
-        - _id
-      properties:
-        _id:
-          type: string
-          example: 'f12a10dac17d920d53676c8f06beabcc'
-        email:
-          type: string
-          example: "info@aseko.de"
-        product:
-          type: string
-          example: 'Enterprise License'
-
-
   requestBodies:
     CreatePayload:
       description: Provide a payload with the length (in days) of license you want to create and all the REQUIRED_CREATE fields used when creating this project
@@ -376,13 +256,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/RenewPayload'
-    UpdatePayload:
-      description: Provide a payload with the license ID and the REQUIRED_CREATE fields you wish to update
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UpdatePayload'
 
   securitySchemes:
     BasicAuthentication:
